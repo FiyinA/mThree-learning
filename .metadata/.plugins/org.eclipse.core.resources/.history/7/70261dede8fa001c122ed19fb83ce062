@@ -1,0 +1,22 @@
+package corbos.orderapi.data;
+
+import java.util.List;
+
+import corbos.orderapi.models.Order;
+
+public interface OrderDao {
+
+    Order add(Order order);
+    
+
+    List<Order> getAll();
+
+    Order findById(int id);
+
+	/*
+	 * // true if item exists and is updated boolean update(Order order);
+	 */
+
+    // true if item exists and is deleted
+    boolean deleteById(int id);
+}

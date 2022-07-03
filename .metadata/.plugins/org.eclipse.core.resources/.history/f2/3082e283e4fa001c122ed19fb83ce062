@@ -1,0 +1,63 @@
+package corbos.orderapi.data;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import org.springframework.stereotype.Repository;
+
+import corbos.orderapi.models.Order;
+
+@Repository
+public class ToDoInMemoryDao implements ToDoDao {
+
+    private static final List<Order> todos = new ArrayList<>();
+    enum Side { Buy, Sell; }
+    enum OrderStatus {BEGIN,NEW,PARTIAL,COMPLETED,CANCELED;}
+
+    @Override
+    public Order add(Order todo) {
+        int nextId = todos.stream()
+                .mapToInt(i -> i.getOrderID())
+                .max()
+                .orElse(0) + 1;
+
+        todo.setOrderID(nextId);
+        todo.setOrderStatus(OrderStatus.valueOf("BEGIN"));
+        todos.add(todo);
+        return todo;
+    }
+
+    @Override
+    public List<Order> getAll() {
+        return new ArrayList<>(todos);
+    }
+
+    @Override
+    public Order findById(int id) {
+        return todos.stream()
+                .filter(i -> i.getId() == id)
+                .findFirst()
+                .orElse(null);
+    }
+
+    @Override
+    public boolean update(Order todo) {
+
+        int index = 0;
+        while (index < todos.size()
+                && todos.get(index).getId() != todo.getId()) {
+            index++;
+        }
+
+        if (index < todos.size()) {
+            todos.set(index, todo);
+        }
+        return index < todos.size();
+    }
+
+    @Override
+    public boolean deleteById(int id) {
+        return todos.removeIf(i -> i.getId() == id);
+    }
+
+}

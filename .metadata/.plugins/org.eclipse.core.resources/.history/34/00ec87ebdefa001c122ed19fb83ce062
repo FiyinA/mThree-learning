@@ -1,0 +1,12 @@
+package corbos.orderapi.models;
+
+public class Order {
+
+    private int orderID;
+    private int clientID;
+    private String stockSymbol;
+    private int orderQuantity;
+    enum Side { Buy, Sell; }
+    enum OrderStatus {BEGIN,NEW,PARTIAL,COMPLETED,CANCELED;}
+    
+}
